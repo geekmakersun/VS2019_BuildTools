@@ -43,9 +43,111 @@
 - `.msu` - Windows 更新包 (~5 MB)
 - `.opc` - Open Packaging Convention 文件 (~47 MB)
 
-克隆本仓库前请确保已安装 Git LFS：
+## 如何拉取/克隆仓库
+
+### 前置条件
+
+克隆本仓库前，必须先安装 Git LFS：
+
+**Windows:**
 ```bash
+# 通过 Git for Windows 安装（已包含 Git LFS）
+# 或单独下载安装：https://git-lfs.github.com/
+
+# 安装后初始化
 git lfs install
+```
+
+**Linux/macOS:**
+```bash
+# Linux (Debian/Ubuntu)
+sudo apt-get install git-lfs
+git lfs install
+
+# Linux (RHEL/CentOS)
+sudo yum install git-lfs
+git lfs install
+
+# macOS (Homebrew)
+brew install git-lfs
+git lfs install
+```
+
+### 克隆完整仓库
+
+```bash
+# HTTPS 方式
+git clone https://github.com/geekmakersun/VS2019_BuildTools.git
+
+# SSH 方式（推荐）
+git clone git@github.com:geekmakersun/VS2019_BuildTools.git
+```
+
+克隆时会自动下载所有 LFS 文件（约 1.78 GB），请确保有足够的磁盘空间和网络带宽。
+
+### 仅拉取 LFS 指针文件（节省带宽）
+
+如果只想获取仓库结构，暂不下载大文件：
+
+```bash
+# 克隆但不下载 LFS 内容
+GIT_LFS_SKIP_SMUDGE=1 git clone https://github.com/geekmakersun/VS2019_BuildTools.git
+
+# 或使用
+git clone --filter=blob:none https://github.com/geekmakersun/VS2019_BuildTools.git
+```
+
+之后需要下载特定文件时：
+```bash
+# 进入仓库目录
+cd VS2019_BuildTools
+
+# 下载所有 LFS 文件
+git lfs pull
+
+# 或只下载特定类型文件
+git lfs pull --include="*.vsix"
+git lfs pull --include="*.exe"
+
+# 或下载特定路径的文件
+git lfs pull --include="Win10SDK_10.0.19041,version=10.0.19041.4/*"
+```
+
+### 检查 LFS 文件状态
+
+```bash
+# 查看 LFS 追踪的文件类型
+git lfs track
+
+# 查看 LFS 文件列表
+git lfs ls-files
+
+# 检查 LFS 文件是否已下载
+git lfs status
+```
+
+### 常见问题
+
+**Q: 克隆时 LFS 文件下载失败？**
+```bash
+# 重试下载
+git lfs pull
+```
+
+**Q: 如何验证 LFS 文件完整性？**
+```bash
+# 验证所有 LFS 文件
+git lfs fsck
+```
+
+**Q: 克隆后某些文件是文本指针而非实际内容？**
+这是 LFS 指针文件，表示大文件未下载。运行 `git lfs pull` 即可下载实际内容。
+
+指针文件示例：
+```
+version https://git-lfs.github.com/spec/v1
+oid sha256:abc123...
+size 12345678
 ```
 
 ## 系统要求
